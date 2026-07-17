@@ -900,6 +900,25 @@ class LocationsRepositoryImpl(
         val provider = payload.substring(0, transportMarker).trim()
         val transportToken = payload.substring(transportMarker + 1, roomMarker).trim()
         val (transport, transportOptions) = parseTransportToken(transportToken)
+
+        var claimsUser = ""
+        var claimsPass = ""
+        val plainTransport = transportToken.substringBefore('<').trim()
+        val ampIdx = plainTransport.indexOf('&')
+        if (ampIdx >= 0) {
+            val params = plainTransport.substring(ampIdx + 1).split('&')
+            for (param in params) {
+                val eq = param.indexOf('=')
+                if (eq <= 0) continue
+                val key = param.substring(0, eq).trim().lowercase()
+                val value = param.substring(eq + 1).trim()
+                when (key) {
+                    "user" -> claimsUser = value
+                    "pass" -> claimsPass = value
+                }
+            }
+        }
+
         val roomId = payload.substring(roomMarker + 1, keyMarker).trim()
         val key = payload.substring(keyMarker + 1, keyEnd).trim()
 
@@ -919,7 +938,9 @@ class LocationsRepositoryImpl(
                 ?: LocationConfig.DEFAULT_VP8_FPS,
             vp8Batch = transportOptions["vp8-batch"]
                 ?: transportOptions["batch"]
-                ?: LocationConfig.DEFAULT_VP8_BATCH
+                ?: LocationConfig.DEFAULT_VP8_BATCH,
+            claimsUser = claimsUser,
+            claimsPass = claimsPass
         ).normalized()
 
         return location

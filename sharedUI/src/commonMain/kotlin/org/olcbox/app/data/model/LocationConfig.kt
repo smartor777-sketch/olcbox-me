@@ -25,7 +25,11 @@ data class LocationConfig(
     @SerialName("vp8_fps")
     val vp8Fps: Int = DEFAULT_VP8_FPS,
     @SerialName("vp8_batch")
-    val vp8Batch: Int = DEFAULT_VP8_BATCH
+    val vp8Batch: Int = DEFAULT_VP8_BATCH,
+    @SerialName("claims_user")
+    val claimsUser: String = "",
+    @SerialName("claims_pass")
+    val claimsPass: String = ""
 ) {
     fun normalized(): LocationConfig {
         val provider = normalizeProvider(bypassProvider)
@@ -37,7 +41,9 @@ data class LocationConfig(
             bypassProvider = provider,
             transport = normalizedTransport,
             vp8Fps = sanitizeVp8Fps(vp8Fps),
-            vp8Batch = sanitizeVp8Batch(vp8Batch)
+            vp8Batch = sanitizeVp8Batch(vp8Batch),
+            claimsUser = claimsUser.trim(),
+            claimsPass = claimsPass.trim()
         )
     }
 

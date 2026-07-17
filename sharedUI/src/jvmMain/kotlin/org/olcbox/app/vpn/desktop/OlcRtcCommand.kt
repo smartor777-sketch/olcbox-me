@@ -11,7 +11,9 @@ internal data class OlcRtcCommand(
     val socksUser: String = "",
     val socksPass: String = "",
     val dnsServer: String,
-    val dataDir: Path? = null
+    val dataDir: Path? = null,
+    val claimsUser: String = "",
+    val claimsPass: String = ""
 ) {
     fun args(configPath: Path): List<String> {
         return listOf(binary.toString(), configPath.toString())
@@ -30,6 +32,11 @@ internal data class OlcRtcCommand(
             appendLine("  id: ${config.id.yamlValue()}")
             appendLine("crypto:")
             appendLine("  key: ${config.key.yamlValue()}")
+            if (claimsUser.isNotBlank()) {
+                appendLine("claims:")
+                appendLine("  user: ${claimsUser.yamlValue()}")
+                appendLine("  pass: ${claimsPass.yamlValue()}")
+            }
             appendLine("net:")
             appendLine("  transport: ${config.transport.yamlValue()}")
             appendLine("  dns: ${dnsServer.yamlValue()}")

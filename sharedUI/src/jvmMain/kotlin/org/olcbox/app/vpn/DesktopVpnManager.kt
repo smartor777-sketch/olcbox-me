@@ -450,7 +450,9 @@ class DesktopVpnManager private constructor(
             socksUser = socksSettings.username,
             socksPass = socksSettings.password,
             dnsServer = dnsServer,
-            dataDir = dataDir
+            dataDir = dataDir,
+            claimsUser = config.claimsUser,
+            claimsPass = config.claimsPass
         )
         val configPath = writeOlcRtcClientConfig(olcRtcCommand)
         val command = olcRtcCommand.args(configPath)

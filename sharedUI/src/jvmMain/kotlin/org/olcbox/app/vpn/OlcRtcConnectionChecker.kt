@@ -150,7 +150,9 @@ internal object OlcRtcConnectionChecker {
             config = config,
             socksPort = socksPort,
             ready = ready,
-            privileged = privileged
+            privileged = privileged,
+            claimsUser = config.claimsUser,
+            claimsPass = config.claimsPass
         )
 
         val startedAt = System.currentTimeMillis()
