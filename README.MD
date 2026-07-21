@@ -1,86 +1,69 @@
-# Olcbox
+# Olcbox-me
 
-`olcrtc` configurator built with Kotlin Multiplatform and Compose.
+Клиент для `olcrtc`-туннелей, построенный на Kotlin Multiplatform и Compose Multiplatform.
+
+Форк [olcbox](https://github.com/alananisimov/olcbox) с поддержкой авторизации по логину/паролю (claims auth).
 
 <p align="center">
-  <img src="docs/screenshots/photo_2026-05-05_15-40-57.jpg" alt="Olcbox home screen" width="200">
-  <img src="docs/screenshots/photo_2026-05-05_15-40-59.jpg" alt="Olcbox location settings screen" width="200">
-  <img src="docs/screenshots/photo_2026-05-05_20-40-45.jpg" alt="Olcbox split tunneling settings screen" width="200">
+  <img src="docs/screenshots/photo_2026-05-05_15-40-57.jpg" alt="Главный экран" width="200">
+  <img src="docs/screenshots/photo_2026-05-05_15-40-59.jpg" alt="Настройки локации" width="200">
+  <img src="docs/screenshots/photo_2026-05-05_20-40-45.jpg" alt="Раздельное туннелирование" width="200">
 </p>
 
-## Status
-Alpha version.
-Not intended for production use.
+## Статус
 
-## Support
-Support options are not publicly listed. Contact the author if needed.
+Альфа-версия. Не предназначена для промышленного использования.
 
-> **Автор ничего не продаёт.  
-> Не продаются приложение, доступ, конфигурации, подписки или услуги поддержки.  
-> Возможен только добровольный донат.**
+## Возможности
 
-## Legal Notice
-This software is intended for development, testing and research purposes only.
+- Запуск/остановка туннеля одним нажатием с индикацией статуса.
+- Сохранённые профили подключения с выбором активной локации.
+- Провайдеры: Jazz, Telemost, WB Stream, Jitsi.
+- Транспорты: DataChannel, VP8, SEI.
+- Настройка VP8: FPS и размер батча.
+- Проверка доступности отдельных локаций.
+- Импорт конфига из буфера обмена/файла и экспорт в буфер обмена.
+- Просмотр логов диагностики с экспортом.
+- Android: режимы TUN/proxy, учётные данные SOCKS5, раздельное туннелирование.
+- Авторизация по логину/паролю (claims auth) — уникальная фича этого форка.
+- Миграция сети, переподключение, watchdog.
 
-The author does not provide any guarantees regarding:
-- availability of network access
-- compatibility with specific services
-- compliance with any external restrictions
+## Платформы
 
-Users are solely responsible for how they use this software and must comply with applicable laws.
-
-## Usage Restrictions
-This software is not intended to be used for bypassing access restrictions or violating applicable laws.
-The author does not support or encourage such use.
-
-## Features
-- One-tap tunnel start/stop with live relay status.
-- Saved connection profiles with active location selection.
-- Providers: Jazz, Telemost, WB Stream, Jitsi.
-- Transports: DataChannel, VP8, SEI.
-- VP8 tuning: FPS and batch size.
-- Connectivity checks for individual locations.
-- Config import from clipboard/file and export to clipboard.
-- Diagnostics log view with log export.
-- Android TUN/proxy modes, SOCKS5 credentials, split tunneling.
-- Network migration, reconnect handling, and watchdog recovery.
-
-## Platform Matrix
-
-| Platform | Modes | Runtime |
+| Платформа | Режим | Стек |
 | --- | --- | --- |
-| Android | TUN, proxy | `VpnService`, `hev-socks5-tunnel`, local `olcrtc` SOCKS5 |
-| iOS | Proxy | local `olcrtc` SOCKS5 hosted by a Swift shell |
-| macOS | Proxy | local `olcrtc` SOCKS5 with OS PAC settings |
-| Windows | TUN | local `olcrtc` SOCKS5, `hev-socks5-tunnel`, Wintun |
-| Linux | TUN | local `olcrtc` SOCKS5, `hev-socks5-tunnel`, policy routes |
+| Android | TUN, proxy | `VpnService`, `hev-socks5-tunnel`, локальный `olcrtc` SOCKS5 |
+| iOS | Proxy | локальный `olcrtc` SOCKS5 через Swift-обёртку |
+| macOS | Proxy | локальный `olcrtc` SOCKS5, PAC через ОС |
+| Windows | TUN | локальный `olcrtc` SOCKS5, `hev-socks5-tunnel`, Wintun |
+| Linux | TUN | локальный `olcrtc` SOCKS5, `hev-socks5-tunnel`, policy routes |
 
-## Requirements
+## Требования
 
-| Area | Requirement |
+| Область | Требование |
 | --- | --- |
 | JVM | JDK 17+ |
 | Android | Android Studio, Android SDK, Android NDK |
-| Desktop native assets | Go and local `olcrtc` fork |
-| Linux TUN | `iproute2`, `/dev/net/tun`, root/Polkit/sudo privileges |
-| Windows TUN | UAC elevation when TUN starts and bundled Wintun runtime |
+| Desktop native assets | Go и локальный форк `olcrtc` |
+| Linux TUN | `iproute2`, `/dev/net/tun`, root/Polkit/sudo |
+| Windows TUN | UAC-повышение при запуске TUN, bundled Wintun |
 
-Default local `olcrtc` path:
+Путь к локальному `olcrtc` по умолчанию:
 
 ```text
 ../olcrtc
 ```
 
-Override it with `OLCRTC_REPO`:
+Переопределение через `OLCRTC_REPO`:
 
 ```bash
 OLCRTC_REPO=/path/to/olcrtc ./gradlew :desktopApp:run
 ```
 
-Relative `OLCRTC_REPO` values are resolved from the `olcbox` project root:
+Относительные пути разрешаются от корня проекта:
 
 ```bash
-OLCRTC_REPO=../olcrtc-ansible-deploy/olcrtc ./gradlew :androidApp:assembleRelease
+OLCRTC_REPO=../olcrtc-users ./gradlew :androidApp:assembleRelease
 ```
 
 ```powershell
@@ -88,53 +71,64 @@ $env:OLCRTC_REPO="C:\path\to\olcrtc"
 .\gradlew.bat :desktopApp:run
 ```
 
-## Commands
+## Сборка
 
-| Task | Command |
-| --- | --- |
-| Android debug APK | `./gradlew :androidApp:assembleDebug` |
-| Install Android debug APK | `./gradlew :androidApp:installDebug` |
-| iOS simulator app | `xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -sdk iphonesimulator -configuration Debug build` |
-| Run desktop app | `./gradlew :desktopApp:run` |
-| Run desktop app with hot reload | `./gradlew :desktopApp:hotRun --auto` |
-| Build desktop native assets | `./gradlew :desktopApp:buildDesktopNativeAssets` |
-| Package current host OS | `./gradlew :desktopApp:packageReleaseDistributionForCurrentOS` |
-| Main checks | `./gradlew :sharedUI:jvmTest :desktopApp:compileKotlin :androidApp:assembleDebug` |
-| JVM tests | `./gradlew :sharedUI:jvmTest` |
+### Android
 
-## Build Outputs
+```bash
+./gradlew :androidApp:assembleDebug      # debug APK
+./gradlew :androidApp:assembleRelease    # release APK (нужен keystore)
+./gradlew :androidApp:installDebug       # установка на устройство
+```
 
-| Target | Command | Output |
+### Desktop
+
+```bash
+./gradlew :desktopApp:run                                    # запуск
+./gradlew :desktopApp:hotRun --auto                          # hot reload
+./gradlew :desktopApp:buildDesktopNativeAssets               # сборка нативных компонентов
+./gradlew :desktopApp:packageReleaseDistributionForCurrentOS # пакет для текущей ОС
+```
+
+### Сборка по платформам
+
+| Цель | Команда | Результат |
 | --- | --- | --- |
 | Android debug | `./gradlew :androidApp:assembleDebug` | `androidApp/build/outputs/apk/debug/androidApp-debug.apk` |
 | Android release | `./gradlew :androidApp:assembleRelease` | `androidApp/build/outputs/apk/release/androidApp-release.apk` |
-| iOS simulator | `xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -sdk iphonesimulator -configuration Debug build` | Xcode DerivedData app product |
-| macOS DMG | `./gradlew :desktopApp:packageReleaseDmg` | `desktopApp/build/compose/binaries/main-release/dmg/Olcbox-1.0.0.dmg` |
-| Windows EXE | `.\gradlew.bat :desktopApp:packageReleaseExe` | `desktopApp\build\compose\binaries\main-release\exe\Olcbox-1.0.0.exe` |
-| Windows MSI | `.\gradlew.bat :desktopApp:packageReleaseMsi` | `desktopApp\build\compose\binaries\main-release\msi\Olcbox-1.0.0.msi` |
-| Linux AppImage | `./gradlew :desktopApp:packageReleaseLinuxAppImage` | `desktopApp/build/compose/binaries/main-release/appimage/Olcbox-1.0.0-amd64.AppImage` |
+| macOS DMG | `./gradlew :desktopApp:packageReleaseDmg` | `desktopApp/build/compose/binaries/main-release/dmg/Olcbox-me-*.dmg` |
+| Windows EXE | `.\gradlew.bat :desktopApp:packageReleaseExe` | `desktopApp\build\compose\binaries\main-release\exe\Olcbox-me-*.exe` |
+| Windows MSI | `.\gradlew.bat :desktopApp:packageReleaseMsi` | `desktopApp\build\compose\binaries\main-release\msi\Olcbox-me-*.msi` |
+| Linux AppImage | `./gradlew :desktopApp:packageReleaseLinuxAppImage` | `desktopApp/build/compose/binaries/main-release/appimage/Olcbox-me-*.AppImage` |
 
-## Native Assets
+### CI/CD
 
-| Asset | Path |
+Сборка автоматизирована через GitHub Actions (`.github/workflows/release.yml`).
+
+При пуше в `main` или ручном запуске (`workflow_dispatch`) собираются:
+- **Android** — подписанный APK (если настроены secrets) или debug APK
+- **Windows** — EXE + MSI + portable ZIP
+- **macOS** — DMG (arm64 + amd64)
+- **Linux** — AppImage
+- **iOS** — unsigned IPA
+
+### Secrets для подписи Android
+
+| Secret | Описание |
 | --- | --- |
-| macOS `olcrtc` | `desktopApp/build/generated/desktopNativeResources/native/olcrtc-darwin-arm64` |
-| Linux `olcrtc` | `desktopApp/build/generated/desktopNativeResources/native/olcrtc-linux-amd64` |
-| Linux `olcrtc` ARM | `desktopApp/build/generated/desktopNativeResources/native/olcrtc-linux-arm64` |
-| Windows `olcrtc` | `desktopApp/build/generated/desktopNativeResources/native/olcrtc-windows-amd64.exe` |
-| Linux `hev-socks5-tunnel` | `desktopApp/build/generated/desktopNativeResources/native/hev-socks5-tunnel-linux-amd64` |
-| Linux `hev-socks5-tunnel` ARM | `desktopApp/build/generated/desktopNativeResources/native/hev-socks5-tunnel-linux-arm64` |
-| Windows `hev-socks5-tunnel` | `desktopApp/build/generated/desktopNativeResources/native/hev-socks5-tunnel-windows-amd64.exe` |
-| Windows Wintun runtime | `desktopApp/build/generated/desktopNativeResources/native/wintun.dll` |
+| `ANDROID_RELEASE_KEYSTORE_BASE64` | Keystore в base64 |
+| `ANDROID_RELEASE_STORE_PASSWORD` | Пароль keystore |
+| `ANDROID_RELEASE_KEY_ALIAS` | Alias ключа |
+| `ANDROID_RELEASE_KEY_PASSWORD` | Пароль ключа |
 
-## Notes
+## Заметки
 
 - Android native ABIs: `armeabi-v7a`, `arm64-v8a`, `x86_64`.
-- Android release builds require `keystore.properties` in the repository root.
-- macOS DMG output is not notarized unless signing/notarization is configured separately.
-- Windows installers must be built on Windows with `jpackage` and WiX available.
-- Linux TUN interface: `olcbox0`.
-- Linux stop removes policy routes and reverts `systemd-resolved` settings when `resolvectl` is available.
+- Release-сборки Android требуют `keystore.properties` в корне репозитория.
+- macOS DMG не нотифицирован без отдельной настройки подписи.
+- Windows-установщики собираются только на Windows (`jpackage` + WiX).
+- Linux TUN-интерфейс: `olcbox0`.
+- Linux: при остановке удаляются policy routes и восстанавливаются настройки `systemd-resolved`.
 
 `keystore.properties`:
 
@@ -145,11 +139,13 @@ keyAlias=...
 keyPassword=...
 ```
 
-Linux privilege override:
-
-Linux privilege override:
+Привилегии на Linux:
 
 ```bash
 OLCBOX_LINUX_PRIVILEGE=sudo ./gradlew :desktopApp:run
 OLCBOX_LINUX_PRIVILEGE=pkexec ./gradlew :desktopApp:run
 ```
+
+## Лицензия
+
+WTFPL
