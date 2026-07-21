@@ -577,7 +577,7 @@ jobs:
           } > release-notes.md
 
       - name: Attest release assets
-        uses: actions/attest-build-provenance@v4
+        uses: actions/attest-build-provenance@v1
         with:
           subject-path: dist/**
 
