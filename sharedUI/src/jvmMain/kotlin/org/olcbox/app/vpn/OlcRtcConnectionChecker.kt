@@ -203,7 +203,9 @@ internal object OlcRtcConnectionChecker {
         config: LocationConfig,
         socksPort: Int,
         ready: CompletableDeferred<Unit>,
-        privileged: Boolean
+        privileged: Boolean,
+        claimsUser: String = "",
+        claimsPass: String = ""
     ): Process {
         val binaries = DesktopNativeAssets.resolveOlcRtcBinaryCandidates()
         var lastException: Exception? = null
@@ -216,7 +218,9 @@ internal object OlcRtcConnectionChecker {
                     config = config,
                     socksPort = socksPort,
                     ready = ready,
-                    privileged = privileged
+                    privileged = privileged,
+                    claimsUser = claimsUser,
+                    claimsPass = claimsPass
                 )
             } catch (e: Exception) {
                 lastException = e
@@ -241,7 +245,9 @@ internal object OlcRtcConnectionChecker {
         config: LocationConfig,
         socksPort: Int,
         ready: CompletableDeferred<Unit>,
-        privileged: Boolean
+        privileged: Boolean,
+        claimsUser: String = "",
+        claimsPass: String = ""
     ): Process {
         val normalized = config.normalized()
         val dataDir = DesktopNativeAssets.resolveOlcRtcDataDir()
@@ -252,7 +258,9 @@ internal object OlcRtcConnectionChecker {
             socksHost = PacServer.LOCAL_SOCKS_HOST,
             socksPort = socksPort,
             dnsServer = DesktopDnsResolver.current(),
-            dataDir = dataDir
+            dataDir = dataDir,
+            claimsUser = claimsUser,
+            claimsPass = claimsPass
         )
         val configPath = writeOlcRtcClientConfig(command)
 
