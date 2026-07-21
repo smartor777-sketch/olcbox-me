@@ -514,8 +514,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
-      attestations: write
     needs:
       - release_version
       - build-windows
@@ -575,11 +573,6 @@ jobs:
             echo "| --- | --- |"
             awk '{printf "| `%s` | `%s` |\n", $2, $1}' "$checksum_file"
           } > release-notes.md
-
-      - name: Attest release assets
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: dist/**
 
       - name: Publish public GitHub Release assets
         env:
