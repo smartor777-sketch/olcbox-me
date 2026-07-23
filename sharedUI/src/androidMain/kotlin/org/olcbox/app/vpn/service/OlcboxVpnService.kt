@@ -248,7 +248,7 @@ class OlcboxVpnService : VpnService() {
         super.onCreate()
         connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         wakeLock = (getSystemService(Context.POWER_SERVICE) as PowerManager)
-            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Olcbox::VpnWakeLock")
+            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "OlcboxME::VpnWakeLock")
             .apply { setReferenceCounted(false) }
 
         installMobileCallbacks()
@@ -592,6 +592,7 @@ class OlcboxVpnService : VpnService() {
                     "transport=${config.transport}, room=${config.id}"
             )
             lastMobileProvider = config.bypassProvider
+            Mobile.setClaims(config.claimsUser, config.claimsPass)
             Mobile.startWithTransport(
                 config.bypassProvider,
                 config.transport,
@@ -677,7 +678,7 @@ class OlcboxVpnService : VpnService() {
             val configFile = writeTun2socksConfig()
             tun2socksStarted = true
             tun2socksStopRequested = false
-            tun2socksThread = thread(name = "OlcboxTun2Socks", isDaemon = true) {
+            tun2socksThread = thread(name = "OlcboxMETun2Socks", isDaemon = true) {
                 try {
                     val result = startTun2socksNative(configFile.absolutePath, nativeFd)
                     if (OlcboxVpnState.status.value !is VpnStatus.Stopping && result != 0) {
@@ -702,7 +703,7 @@ class OlcboxVpnService : VpnService() {
     private fun establishSystemVpnTunnel(): ParcelFileDescriptor? {
         return try {
             val builder = Builder()
-                .setSession("Olcbox VPN")
+                .setSession("OlcboxME VPN")
                 .setMtu(TUN_MTU)
                 .addAddress(TUN_IPV4_ADDRESS, IPV4_PREFIX_LENGTH)
                 .addRoute("0.0.0.0", 0)
@@ -724,7 +725,7 @@ class OlcboxVpnService : VpnService() {
     private fun applySplitTunneling(builder: Builder): Boolean {
         return when (splitTunnelMode) {
             AndroidSplitTunnelMode.AllApps -> {
-                addDisallowedApp(builder, packageName, "Olcbox")
+                addDisallowedApp(builder, packageName, "OlcboxME")
                 addLog("Split tunneling: all apps use TUN")
                 true
             }
@@ -754,7 +755,7 @@ class OlcboxVpnService : VpnService() {
             }
 
             AndroidSplitTunnelMode.BypassSelected -> {
-                addDisallowedApp(builder, packageName, "Olcbox")
+                addDisallowedApp(builder, packageName, "OlcboxME")
                 val applied = splitTunnelBypassApps
                     .filter { it.isNotBlank() && it != packageName }
                     .distinct()
@@ -1401,7 +1402,7 @@ class OlcboxVpnService : VpnService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
-                "Olcbox VPN",
+                "OlcboxME VPN",
                 NotificationManager.IMPORTANCE_LOW
             )
             (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
@@ -1427,7 +1428,7 @@ class OlcboxVpnService : VpnService() {
 
     private fun buildNotification(status: String) =
         NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setContentTitle("Olcbox ${activeModeLabel()}")
+            .setContentTitle("OlcboxME ${activeModeLabel()}")
             .setContentText(status)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setOngoing(true)
@@ -1491,7 +1492,7 @@ class OlcboxVpnService : VpnService() {
                 bind(InetSocketAddress(AndroidSocksProxySettings.DEFAULT_HOST, listenPort))
             }
             serverSocket = server
-            acceptThread = thread(name = "OlcboxSocksProxy", isDaemon = true) {
+            acceptThread = thread(name = "OlcboxMESocksProxy", isDaemon = true) {
                 acceptLoop(server)
             }
             log("SOCKS proxy listening on ${AndroidSocksProxySettings.DEFAULT_HOST}:$listenPort")
@@ -1516,7 +1517,7 @@ class OlcboxVpnService : VpnService() {
                     .getOrNull() ?: continue
 
                 synchronized(sockets) { sockets.add(client) }
-                thread(name = "OlcboxSocksProxyClient", isDaemon = true) {
+                thread(name = "OlcboxMESocksProxyClient", isDaemon = true) {
                     try {
                         handleClient(client)
                     } finally {
@@ -1600,7 +1601,7 @@ class OlcboxVpnService : VpnService() {
         }
 
         private fun relay(from: Socket, to: Socket, name: String): Thread {
-            return thread(name = "OlcboxSocksRelay-$name", isDaemon = true) {
+            return thread(name = "OlcboxMESocksRelay-$name", isDaemon = true) {
                 runCatching {
                     from.getInputStream().copyTo(to.getOutputStream(), RELAY_BUFFER_SIZE)
                 }
@@ -1685,9 +1686,9 @@ class OlcboxVpnService : VpnService() {
         private const val MAPDNS_ADDRESS = "1.1.1.1"
         private const val MAPDNS_NETWORK = "100.64.0.0"
         private const val MAPDNS_NETMASK = "255.192.0.0"
-        private const val NOTIFICATION_CHANNEL_ID = "olcbox_vpn"
+        private const val NOTIFICATION_CHANNEL_ID = "olcboxme_vpn"
         private const val NOTIFICATION_ID = 100
-        private const val TAG = "OlcboxVpnService"
+        private const val TAG = "OlcboxMEVpnService"
 
         private fun addLog(msg: String) {
             OlcboxVpnState.addLog(msg)

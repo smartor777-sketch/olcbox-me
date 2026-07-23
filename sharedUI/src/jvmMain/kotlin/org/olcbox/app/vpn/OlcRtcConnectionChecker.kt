@@ -150,9 +150,7 @@ internal object OlcRtcConnectionChecker {
             config = config,
             socksPort = socksPort,
             ready = ready,
-            privileged = privileged,
-            claimsUser = config.claimsUser,
-            claimsPass = config.claimsPass
+            privileged = privileged
         )
 
         val startedAt = System.currentTimeMillis()
@@ -259,8 +257,8 @@ internal object OlcRtcConnectionChecker {
             socksPort = socksPort,
             dnsServer = DesktopDnsResolver.current(),
             dataDir = dataDir,
-            claimsUser = claimsUser,
-            claimsPass = claimsPass
+            claimsUser = normalized.claimsUser,
+            claimsPass = normalized.claimsPass
         )
         val configPath = writeOlcRtcClientConfig(command)
 
@@ -417,5 +415,5 @@ internal object OlcRtcConnectionChecker {
 
     private const val PROCESS_STOP_TIMEOUT_MS = 3_000L
     private const val PROCESS_KILL_TIMEOUT_MS = 1_000L
-    private const val DEFAULT_DEVICE_ID = "olcbox"
+    private const val DEFAULT_DEVICE_ID = "olcboxme"
 }

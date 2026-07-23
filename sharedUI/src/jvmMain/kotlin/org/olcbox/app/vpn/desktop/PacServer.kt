@@ -14,7 +14,7 @@ class PacServer(
     @Volatile
     private var socksTarget = SocksTarget(LOCAL_SOCKS_HOST, LOCAL_SOCKS_PORT, "", "")
     private var executor = Executors.newSingleThreadExecutor { runnable ->
-        Thread(runnable, "OlcboxPacServer").apply { isDaemon = true }
+        Thread(runnable, "OlcboxMEPacServer").apply { isDaemon = true }
     }
 
     val url: String
@@ -29,7 +29,7 @@ class PacServer(
         updateSocksTarget(socksHost, socksPort, socksUsername, socksPassword)
         if (server != null) return
         executor = Executors.newSingleThreadExecutor { runnable ->
-            Thread(runnable, "OlcboxPacServer").apply { isDaemon = true }
+            Thread(runnable, "OlcboxMEPacServer").apply { isDaemon = true }
         }
         server = HttpServer.create(InetSocketAddress(host, port), 0).also { httpServer ->
             httpServer.createContext("/proxy.pac") { exchange ->

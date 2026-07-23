@@ -377,7 +377,11 @@ data class LocationEntry(
     @SerialName("vp8_batch")
     val legacyVp8Batch: Int? = null,
     @SerialName("vp8Batch")
-    val legacyVp8BatchCamel: Int? = null
+    val legacyVp8BatchCamel: Int? = null,
+    @SerialName("claims_user")
+    val claimsUser: String = "",
+    @SerialName("claims_pass")
+    val claimsPass: String = ""
 ) {
     val location: LocationConfig
         get() {
@@ -403,7 +407,9 @@ data class LocationEntry(
                 vp8Batch = vp8Options?.batch
                     ?: legacyVp8Batch
                     ?: legacyVp8BatchCamel
-                    ?: LocationConfig.DEFAULT_VP8_BATCH
+                    ?: LocationConfig.DEFAULT_VP8_BATCH,
+                claimsUser = claimsUser,
+                claimsPass = claimsPass
             ).normalized()
         }
 
@@ -424,7 +430,9 @@ data class LocationEntry(
             transport = LocationTransportConfig.from(config),
             metadata = metadata
                 ?.normalized()
-                ?.takeUnless { it.isEmpty() }
+                ?.takeUnless { it.isEmpty() },
+            claimsUser = config.claimsUser,
+            claimsPass = config.claimsPass
         )
     }
 
@@ -446,7 +454,9 @@ data class LocationEntry(
                 ),
                 authProvider = config.bypassProvider,
                 transport = LocationTransportConfig.from(config),
-                metadata = metadata
+                metadata = metadata,
+                claimsUser = config.claimsUser,
+                claimsPass = config.claimsPass
             ).normalized()
         }
 

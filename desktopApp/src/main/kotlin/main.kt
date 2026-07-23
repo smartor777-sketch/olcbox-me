@@ -133,7 +133,7 @@ private class DesktopAppDependencies {
     }
 }
 
-private const val WINDOWS_ELEVATED_START_ARGUMENT = "--olcbox-start-vpn-after-elevation"
+private const val WINDOWS_ELEVATED_START_ARGUMENT = "--olcboxme-start-vpn-after-elevation"
 
 fun main(args: Array<String>) = application {
     // Configure JNA to find native libraries in resources
@@ -186,7 +186,7 @@ fun main(args: Array<String>) = application {
                             updateMessage = "${info.channel.name} update found: ${info.version}"
                         } else {
                             updateOffer = null
-                            updateMessage = "Olcbox is up to date"
+                            updateMessage = "OlcboxME is up to date"
                         }
                     } else {
                         updateOffer = null
@@ -252,7 +252,7 @@ fun main(args: Array<String>) = application {
     Tray(
         state = trayState,
         icon = painterResource("LinuxIcon.png"),
-        tooltip = "Olcbox",
+        tooltip = "OlcboxME",
         menu = {
             Item("Open", onClick = { isWindowVisible = true })
             Item(
@@ -275,7 +275,7 @@ fun main(args: Array<String>) = application {
     )
 
     Window(
-        title = "olcbox",
+        title = "OlcboxME",
         visible = isWindowVisible,
         state = rememberWindowState(width = 430.dp, height = 780.dp),
         onCloseRequest = {
@@ -699,14 +699,14 @@ private fun desktopSubscriptionItems(items: List<LocationItem>): List<Subscripti
 }
 
 private fun chooseConfigFile(owner: Frame): File? {
-    val dialog = FileDialog(owner, "Import Olcbox Config", FileDialog.LOAD)
+    val dialog = FileDialog(owner, "Import OlcboxME Config", FileDialog.LOAD)
     dialog.isVisible = true
 
     return dialog.files.firstOrNull()
 }
 
 private fun chooseSaveFile(owner: Frame, defaultName: String): File? {
-    val dialog = FileDialog(owner, "Save Olcbox Logs", FileDialog.SAVE)
+    val dialog = FileDialog(owner, "Save OlcboxME Logs", FileDialog.SAVE)
     dialog.file = defaultName
     dialog.isVisible = true
 

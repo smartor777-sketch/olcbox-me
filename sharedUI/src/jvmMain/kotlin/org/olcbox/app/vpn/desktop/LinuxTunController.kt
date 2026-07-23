@@ -187,7 +187,7 @@ internal class LinuxTunController(
     }
 
     internal companion object {
-        const val TUN_NAME = "olcbox0"
+        const val TUN_NAME = "olcboxme0"
         const val TUN_MTU = 1500
         const val TUN_IPV4_ADDRESS = "10.0.88.88"
         const val MAPDNS_ADDRESS = "1.1.1.1"
@@ -246,7 +246,7 @@ internal class LinuxTunController(
         }
 
         fun upScriptContent(
-            rpFilterStatePath: String = "/tmp/olcbox-rp-filter.state"
+            rpFilterStatePath: String = "/tmp/olcboxme-rp-filter.state"
         ): String {
             val statePath = shellSingleQuote(rpFilterStatePath)
             return """
@@ -277,7 +277,7 @@ internal class LinuxTunController(
         }
 
         fun downScriptContent(
-            rpFilterStatePath: String = "/tmp/olcbox-rp-filter.state"
+            rpFilterStatePath: String = "/tmp/olcboxme-rp-filter.state"
         ): String {
             val statePath = shellSingleQuote(rpFilterStatePath)
             return """
@@ -311,7 +311,7 @@ internal class LinuxTunController(
 internal object LinuxPrivilege {
     fun command(command: List<String>): List<String> {
         if (isRoot()) return command
-        val preferred = System.getenv("OLCBOX_LINUX_PRIVILEGE")?.lowercase()
+        val preferred = System.getenv("OLCBOXME_LINUX_PRIVILEGE")?.lowercase()
         return when {
             preferred == "sudo" -> listOf("sudo", "-n") + command
             preferred == "pkexec" -> listOf("pkexec") + command

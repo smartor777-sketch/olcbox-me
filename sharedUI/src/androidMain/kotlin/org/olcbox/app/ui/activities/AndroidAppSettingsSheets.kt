@@ -290,14 +290,6 @@ internal fun AppSettingsSheet(
                     onRefreshClick = onSubscriptionRefreshClick
                 )
 
-                AppSettingsRoute.Updates -> UpdatesSettingsContent(
-                    settings = updateSettings,
-                    statusText = updateStatusText,
-                    downloadProgress = updateDownloadProgress,
-                    onBack = { route = AppSettingsRoute.Hub },
-                    onIntervalSelected = onUpdateIntervalSelected,
-                    onCheckUpdatesClick = onCheckUpdatesClick
-                )
             }
         }
     }
@@ -363,14 +355,6 @@ private fun AppSettingsHubContent(
             icon = Icons.Outlined.Share,
             enabled = true,
             onClick = onSubscriptionsSharingClick
-        )
-
-        SettingsNavigationRow(
-            title = "Update Settings",
-            value = "Nightly · every ${updateSettings.intervalHours}h",
-            icon = Icons.Outlined.Refresh,
-            enabled = true,
-            onClick = onUpdatesClick
         )
 
         SettingsNavigationRow(

@@ -70,7 +70,7 @@ internal class WindowsTunController(
     private suspend fun requestAdministratorRestart() {
         val processInfo = ProcessHandle.current().info()
         val currentCommand = processInfo.command().orElse(null)
-            ?: error("Olcbox cannot resolve its Windows launcher for administrator restart")
+            ?: error("OlcboxME cannot resolve its Windows launcher for administrator restart")
         val currentArguments = processInfo.arguments().orElse(emptyArray()).toList()
         val restartArguments = if (ELEVATED_START_ARGUMENT in currentArguments) {
             currentArguments
@@ -192,7 +192,7 @@ internal class WindowsTunController(
     }
 
     internal companion object {
-        const val TUN_NAME = "Olcbox"
+        const val TUN_NAME = "OlcboxME"
         const val TUN_MTU = 1500
         const val TUN_IPV4_ADDRESS = "10.0.88.88"
         const val TUN_IPV4_PREFIX_LENGTH = 24
@@ -201,7 +201,7 @@ internal class WindowsTunController(
         const val TUN_READY_POLL_MS = 100L
         const val PROCESS_STOP_TIMEOUT_MS = 3_000L
         const val PROCESS_KILL_TIMEOUT_MS = 1_000L
-        const val ELEVATED_START_ARGUMENT = "--olcbox-start-vpn-after-elevation"
+        const val ELEVATED_START_ARGUMENT = "--olcboxme-start-vpn-after-elevation"
 
         fun tun2SocksCommand(
             tun2SocksBinary: Path,

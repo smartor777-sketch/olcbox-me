@@ -114,7 +114,7 @@ val olcrtcRepoDir = olcrtcRepo.map { rootProject.file(it) }
 val generatedNativeResources = layout.buildDirectory.dir("generated/desktopNativeResources")
 val hevSocks5TunnelSourceDir = rootProject.layout.projectDirectory.dir("androidApp/src/main/jni/hev-socks5-tunnel")
 val currentBuildOs = OperatingSystem.current()
-val desktopPackageName = "Olcbox"
+val desktopPackageName = "OlcboxME"
 val desktopPackageVersion = providers.gradleProperty("olcbox.version").orElse("1.0.0").get()
 val tun2SocksVersion = "2.6.0"
 val wintunVersion = "0.14.1"
@@ -470,14 +470,14 @@ compose.desktop {
             }
             windows {
                 iconFile.set(project.file("appIcons/WindowsIcon.ico"))
-                menuGroup = "Olcbox"
+                menuGroup = "OlcboxME"
                 shortcut = true
                 dirChooser = true
-                upgradeUuid = "6f0aaf78-dbed-4745-9d95-9e63f10a30de"
+                upgradeUuid = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
             }
             macOS {
                 iconFile.set(project.file("appIcons/MacosIcon.icns"))
-                bundleID = "org.olcbox.app.desktopApp"
+                bundleID = "org.olcboxme.app.desktopApp"
             }
         }
     }
@@ -522,17 +522,17 @@ if (currentBuildOs.isLinux) {
             APPRUN
             chmod +x "${'$'}target_dir/AppRun"
 
-            cat > "${'$'}target_dir/org.olcbox.app.desktopApp.desktop" <<'DESKTOP'
+            cat > "${'$'}target_dir/org.olcboxme.app.desktopApp.desktop" <<'DESKTOP'
             [Desktop Entry]
             Type=Application
             Name=$desktopPackageName
             Exec=$desktopPackageName
-            Icon=olcbox
+            Icon=olcboxme
             Categories=Network;Utility;
             Terminal=false
             DESKTOP
 
-            cp "${'$'}icon_file" "${'$'}target_dir/olcbox.png"
+            cp "${'$'}icon_file" "${'$'}target_dir/olcboxme.png"
             """.trimIndent(),
             "prepareReleaseLinuxAppDir",
             jpackageAppDir.get().asFile.absolutePath,

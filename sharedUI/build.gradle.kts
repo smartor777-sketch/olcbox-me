@@ -17,7 +17,7 @@ plugins {
 
 val olcboxVersion = providers.gradleProperty("olcbox.version").orElse("1.0.0")
 val olcboxVersionValue = olcboxVersion.get()
-val generatedAppInfoDir = layout.buildDirectory.dir("generated/source/olcboxAppInfo/commonMain")
+val generatedAppInfoDir = layout.buildDirectory.dir("generated/source/olcboxmeAppInfo/commonMain")
 
 val olcrtcRepoPath = providers.environmentVariable("OLCRTC_REPO")
     .orElse(rootProject.layout.projectDirectory.asFile.parentFile.resolve("olcrtc").absolutePath)
@@ -44,7 +44,7 @@ abstract class GenerateAppInfoTask : DefaultTask() {
             package org.olcbox.app
 
             internal object GeneratedAppInfo {
-                const val NAME: String = "olcbox"
+                const val NAME: String = "OlcboxME"
                 const val VERSION: String = "$escapedVersion"
             }
             """.trimIndent() + "\n"

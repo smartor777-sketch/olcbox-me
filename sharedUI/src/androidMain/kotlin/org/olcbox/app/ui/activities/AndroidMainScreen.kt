@@ -249,9 +249,6 @@ fun AndroidMainScreen(
     LaunchedEffect(appUpdateService) {
         val loaded = updateSettingsStore.load()
         updateSettings = loaded
-        if (appUpdateService != null) {
-            checkUpdate(manual = false)
-        }
     }
 
     fun reloadLocationsAfterImport(onComplete: () -> Unit = {}) {

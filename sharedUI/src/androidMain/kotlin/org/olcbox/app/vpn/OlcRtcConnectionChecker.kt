@@ -13,6 +13,7 @@ internal object OlcRtcConnectionChecker {
             val config = locationConfig.normalized()
             if (!config.isComplete()) return@withContext null
 
+            Mobile.setClaims(config.claimsUser, config.claimsPass)
             repeat(CONNECTION_CHECK_ATTEMPTS) {
                 val socksPort = allocateLocalPort()
 
@@ -44,6 +45,7 @@ internal object OlcRtcConnectionChecker {
             val config = locationConfig.normalized()
             if (!config.isComplete()) return@withContext null
 
+            Mobile.setClaims(config.claimsUser, config.claimsPass)
             repeat(HTTP_PING_ATTEMPTS) {
                 val socksPort = allocateLocalPort()
 

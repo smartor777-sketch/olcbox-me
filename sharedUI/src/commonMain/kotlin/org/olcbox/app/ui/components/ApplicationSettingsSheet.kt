@@ -199,6 +199,13 @@ fun ApplicationSettingsSheet(
                     onRefreshClick = onSubscriptionRefreshClick
                 )
 
+                SharedSettingsRoute.Logs -> SharedLogsSettingsContent(
+                    logs = logs,
+                    onBack = { route = SharedSettingsRoute.Hub },
+                    onSaveClick = onSaveLogsClick,
+                    onShareClick = onShareLogsClick
+                )
+
                 SharedSettingsRoute.Updates -> SharedUpdatesSettingsContent(
                     settings = updateSettings,
                     statusText = updateStatusText,
@@ -206,13 +213,6 @@ fun ApplicationSettingsSheet(
                     onBack = { route = SharedSettingsRoute.Hub },
                     onIntervalSelected = onUpdateIntervalSelected,
                     onCheckUpdatesClick = onCheckUpdatesClick
-                )
-
-                SharedSettingsRoute.Logs -> SharedLogsSettingsContent(
-                    logs = logs,
-                    onBack = { route = SharedSettingsRoute.Hub },
-                    onSaveClick = onSaveLogsClick,
-                    onShareClick = onShareLogsClick
                 )
             }
         }
@@ -255,13 +255,6 @@ private fun SharedSettingsHubContent(
             value = subscriptionsCount.subscriptionSummary(),
             icon = Icons.Outlined.Share,
             onClick = onSubscriptionsClick
-        )
-
-        SharedNavigationRow(
-            title = "Update Settings",
-            value = "Nightly · every ${updateSettings.intervalHours}h",
-            icon = Icons.Outlined.Refresh,
-            onClick = onUpdatesClick
         )
 
         SharedNavigationRow(
